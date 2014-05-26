@@ -1,0 +1,68 @@
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "maven"
+apply plugin: "project-report"
+apply plugin: "build-dashboard"
+
+group = "io.github.systemgatherer"
+version = "0.5"
+
+idea {
+    module {
+        excludeDirs = [file(".gradle"), file(".idea"), file("gradle"), file("build")]
+        ["classes", "docs", "dependency-cache", "libs", "reports", "resources", "test-results", "tmp"].each {
+            excludeDirs << file("$buildDir/$it")
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven{
+        url "http://download.java.net/maven/2/"
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "src/main/java"
+        }
+        resources {
+            srcDir "src/main/resources"
+        }
+    }
+    test {
+        java {
+            srcDir "src/test/java"
+        }
+        resources {
+            srcDir "src/test/resources"
+        }
+    }
+}
+
+ext {
+    dropwizardVersion = "0.7.0"
+    junitVersion = "4.11"
+    lombokVersion = "1.12.6"
+    httpClientVersion = "4.3.3"
+    quartzVersion = "2.2.1"
+}
+
+dependencies {
+    compile "io.dropwizard:dropwizard-core:$dropwizardVersion"
+    compile "org.projectlombok:lombok:$lombokVersion"
+    compile "org.apache.httpcomponents:httpclient:$httpClientVersion"
+    compile "org.quartz-scheduler:quartz:$quartzVersion"
+
+    testCompile "junit:junit:$junitVersion"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "1.12"
+}
+
+tasks.withType(Compile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}

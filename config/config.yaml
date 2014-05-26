@@ -1,0 +1,15 @@
+server:
+  applicationConnectors:
+  - type: http
+    port: 9000
+  adminConnectors:
+  - type: http
+    port: 9001
+
+hosts:
+    - name: localhost
+      ip: 127.0.0.1
+      checks:
+        - check_disk
+        - check_memory
+
