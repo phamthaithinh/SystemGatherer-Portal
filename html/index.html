@@ -9,6 +9,7 @@
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.js"></script>
+    <script src="js/application.js"></script>
 </head>
 <body>
 
@@ -19,7 +20,8 @@
                 <div class="panel-heading">Menu</div>
                 <div class="panel-body">
                     <div class="btn-group">
-
+                        <select id="hosts">
+                        </select>
                     </div>
                 </div>
 
@@ -29,7 +31,13 @@
         <div class="col-md-10">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    Basic panel example
+                    <div id="results">
+                        <div class="alert alert-warning" id="127.0.0.1:8080_check_disk">loadbalancer	check_disk 	{"free":42554912768,"total":52710469632,"usage_percent":"100.00","used":7454425088}	Last check: Mon Jun 02 2014 02:35:48 GMT+0400 (MSK)</div>
+                        <div class="alert alert-success" id="127.0.0.1:8080_check_disk">loadbalancer	check_disk 	{"free":42554912768,"total":52710469632,"usage_percent":"100.00","used":7454425088}	Last check: Mon Jun 02 2014 02:35:48 GMT+0400 (MSK)</div>
+                        <div class="alert alert-danger" id="127.0.0.1:8080_check_disk">loadbalancer	check_disk 	{"free":42554912768,"total":52710469632,"usage_percent":"100.00","used":7454425088}	Last check: Mon Jun 02 2014 02:35:48 GMT+0400 (MSK)</div>
+                        <div class="alert alert-info" id="127.0.0.1:8080_check_disk">loadbalancer	check_disk 	{"free":42554912768,"total":52710469632,"usage_percent":"100.00","used":7454425088}	Last check: Mon Jun 02 2014 02:35:48 GMT+0400 (MSK)</div>
+                        <div class="alert alert-success" id="127.0.0.1:8080_check_disk">loadbalancer	check_disk 	{"free":42554912768,"total":52710469632,"usage_percent":"100.00","used":7454425088}	Last check: Mon Jun 02 2014 02:35:48 GMT+0400 (MSK)</div>
+                    </div>
                 </div>
             </div>
         </div>

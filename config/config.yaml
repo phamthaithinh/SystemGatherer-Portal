@@ -8,7 +8,7 @@ server:
 
 hosts:
     - name: localhost
-      ip: 127.0.0.1
+      ip: 127.0.0.1:8080
       checks:
         - check_disk
         - check_memory
