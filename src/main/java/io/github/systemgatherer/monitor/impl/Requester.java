@@ -1,5 +1,8 @@
 package io.github.systemgatherer.monitor.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.name.Named;
 import io.github.systemgatherer.configuration.Host;
 import io.github.systemgatherer.monitor.IRequester;
 import org.apache.http.HttpResponse;
@@ -10,14 +13,23 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * @author Rinat Muhamedgaliev aka rmuhamedgaliev
  */
-public class Requester implements IRequester, Job {
+public class Requester implements IRequester {
+
+    private final List<Host> hosts;
+
+    @Inject
+    public Requester(@Named("hosts") List<Host> hosts) {
+        this.hosts = hosts;
+    }
 
     @Override
     public String getStatus(Host host) {
@@ -39,17 +51,22 @@ public class Requester implements IRequester, Job {
 
         HttpResponse response = client.execute(request);
 
-        System.out.println("Response Code : "
-                + response.getStatusLine().getStatusCode());
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
-        BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent()));
+
+
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
         StringBuffer result = new StringBuffer();
         String line = "";
         while ((line = rd.readLine()) != null) {
             result.append(line);
         }
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode node = mapper.convertValue(result, JsonNode.class);
+
         return result.toString();
     }
 

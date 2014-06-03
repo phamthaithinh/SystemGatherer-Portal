@@ -1,5 +1,7 @@
 package io.github.systemgatherer.web;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.github.systemgatherer.configuration.SGConfiguration;
 
 import javax.ws.rs.GET;
@@ -17,6 +19,7 @@ public class Root {
 
     private final SGConfiguration configuration;
 
+    @Inject
     public Root(SGConfiguration configuration) {
         this.configuration = configuration;
     }

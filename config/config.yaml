@@ -6,10 +6,17 @@ server:
   - type: http
     port: 9001
 
+email:
+  host: smtp,gmail.com
+  port: 465
+  username: rumbikvorp@gmail.com
+  password: gremmlok_1991
+
 hosts:
     - name: localhost
       ip: 127.0.0.1:8080
       checks:
         - check_disk
         - check_memory
+
 

@@ -44,19 +44,31 @@ sourceSets {
 
 ext {
     dropwizardVersion = "0.7.0"
+    dropwizardGuiceVersion = "0.7.0.2"
     junitVersion = "4.11"
     lombokVersion = "1.12.6"
     httpClientVersion = "4.3.3"
     quartzVersion = "2.2.1"
+    guiceVersion = "4.0-beta4"
 }
 
 dependencies {
     compile "io.dropwizard:dropwizard-core:$dropwizardVersion"
+    compile "io.dropwizard:dropwizard-testing:$dropwizardVersion"
     compile "org.projectlombok:lombok:$lombokVersion"
     compile "org.apache.httpcomponents:httpclient:$httpClientVersion"
     compile "org.quartz-scheduler:quartz:$quartzVersion"
+    compile("com.hubspot.dropwizard:dropwizard-guice:$dropwizardGuiceVersion") {
+        exclude group: "com.google.inject"
+        exclude group: "com.google.inject.extensions"
+    }
+    compile "com.google.inject:guice:$guiceVersion"
+    compile "com.google.inject.extensions:guice-servlet:$guiceVersion"
 
     testCompile "junit:junit:$junitVersion"
+
+    /*Email*/
+    compile "javax.mail:mail:1.5.0-b01"
 }
 
 task wrapper(type: Wrapper) {
