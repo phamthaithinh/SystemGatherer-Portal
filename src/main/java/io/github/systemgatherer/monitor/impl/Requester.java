@@ -24,13 +24,6 @@ import java.util.List;
  */
 public class Requester implements IRequester {
 
-    private final List<Host> hosts;
-
-    @Inject
-    public Requester(@Named("hosts") List<Host> hosts) {
-        this.hosts = hosts;
-    }
-
     @Override
     public String getStatus(Host host) {
 
@@ -68,11 +61,5 @@ public class Requester implements IRequester {
         JsonNode node = mapper.convertValue(result, JsonNode.class);
 
         return result.toString();
-    }
-
-    @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        Host host = new Host("localhost", "127.0.0.1", new String[]{"check_disk", "check_memory"});
-        getStatus(host);
     }
 }

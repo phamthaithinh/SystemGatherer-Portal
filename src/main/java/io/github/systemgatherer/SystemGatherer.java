@@ -37,7 +37,5 @@ public class SystemGatherer extends Application<SGConfiguration> {
 
     public static void main(String[] args) throws Exception {
         new SystemGatherer().run(args);
-        Sheduller sheduller = new Sheduller();
-        sheduller.jobRunner();
     }
 }
