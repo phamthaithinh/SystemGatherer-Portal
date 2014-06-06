@@ -11,13 +11,5 @@ import java.util.List;
  */
 @Data
 public class SGConfiguration extends Configuration {
-    @NotEmpty
-    private List<Host> hosts;
 
-    public SGConfiguration() {
-    }
-
-    public SGConfiguration(List<Host> hostses) {
-        this.hosts = hosts;
-    }
 }

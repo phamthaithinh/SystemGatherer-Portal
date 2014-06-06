@@ -18,32 +18,83 @@ function generate_select(data) {
 
 function get_results(data) {
     var results = $("#results");
-    for(index = 0; index < data.length; index++) {
-        for(check_number = 0; check_number < data[index].checks.length;check_number++) {
-            var buffer = data[index];
-            $.get("http://" + buffer.ip + "/?name=" + buffer.checks[check_number], function(response){
-                if (response.code == 0) {
-                    results.append(
-                            "<div class='alert alert-success' id="+ buffer.ip +"_" + response.name + ">"
-                            + buffer.name + "\t" + response.name + " \t" + JSON.stringify(response.info) + "\tLast check: " + new Date(response.date) + "</div>"
-                    );
-                } else if (response.code == 1) {
-                    results.append(
-                            "<div class='alert alert-warning' id="+ buffer.ip +"_" + response.name + ">"
-                            + buffer.name + "\t" + response.name + " \t" + JSON.stringify(response.info) + "\tLast check: " + new Date(response.date) + "</div>"
-                    );
-                }  else if (response.code == 2) {
-                    results.append(
-                            "<div class='alert alert-danger' id="+ buffer.ip +"_" + response.name + ">"
-                            + buffer.name + "\t" + response.name + " \t" + JSON.stringify(response.info) + "\tLast check: " + new Date(response.date) + "</div>"
-                    );
-                } else if (response.code == 3) {
-                    results.append(
-                            "<div class='alert alert-info' id="+ buffer.ip +"_" + response.name + ">"
-                            + buffer.name + "\t" + response.name + " \t" + JSON.stringify(response.info) + "\tLast check: " + new Date(response.date) + "</div>"
-                    );
-                }
-            });
-        }
+
+    var data = [];
+    var nodes = [];
+    var edges = [];
+
+    for(index = 0; index < 0; index++) {
+        nodes.push(
+            {
+                "id": data[index].ip,
+                "label": data[index].ip,
+                "x": index,
+                "y": data[index].ip == "127.0.0.1" ? 0 : 1
+            }
+        );
+        edges.push(
+            {
+                "id": index,
+                "source": "127.0.0.1",
+                "target": data[index].ip
+            }
+        )
     }
+
+    data.push(
+        {
+            "nodes": nodes,
+            "edges": edges
+        }
+    )
+
+    sigma.parsers.json(data, {
+        container: 'results',
+        settings: {
+            defaultNodeColor: '#ec5148'
+        }
+    });
 }
+
+//{
+//    "nodes": [
+//    {
+//        "id": "n0",
+//        "label": "A node",
+//        "x": 0,
+//        "y": 0,
+//        "size": 3
+//    },
+//    {
+//        "id": "n1",
+//        "label": "Another node",
+//        "x": 3,
+//        "y": 1,
+//        "size": 2
+//    },
+//    {
+//        "id": "n2",
+//        "label": "And a last one",
+//        "x": 1,
+//        "y": 3,
+//        "size": 1
+//    }
+//],
+//    "edges": [
+//    {
+//        "id": "e0",
+//        "source": "n0",
+//        "target": "n1"
+//    },
+//    {
+//        "id": "e1",
+//        "source": "n1",
+//        "target": "n2"
+//    },
+//    {
+//        "id": "e2",
+//        "source": "n2",
+//        "target": "n0"
+//    }
+//]
+//}

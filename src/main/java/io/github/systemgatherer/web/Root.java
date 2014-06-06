@@ -1,6 +1,9 @@
 package io.github.systemgatherer.web;
 
+import com.google.inject.Inject;
+import io.github.systemgatherer.configuration.ConfigLoader;
 import io.github.systemgatherer.configuration.SGConfiguration;
+import io.github.systemgatherer.sheduller.Sheduller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,6 +20,7 @@ public class Root {
 
     private final SGConfiguration configuration;
 
+    @Inject
     public Root(SGConfiguration configuration) {
         this.configuration = configuration;
     }
@@ -24,6 +28,13 @@ public class Root {
     @GET
     @Path("/hosts")
     public List<io.github.systemgatherer.configuration.Host> hosts() {
-        return configuration.getHosts();
+        return ConfigLoader.getConfig().getHosts();
+    }
+
+    @GET
+    @Path("/start")
+    public int start() {
+        Sheduller sheduller = new Sheduller();
+        return 200;
     }
 }

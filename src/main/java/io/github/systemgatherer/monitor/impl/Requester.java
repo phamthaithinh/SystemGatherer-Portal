@@ -1,7 +1,14 @@
 package io.github.systemgatherer.monitor.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import io.github.systemgatherer.configuration.ConfigLoader;
 import io.github.systemgatherer.configuration.Host;
 import io.github.systemgatherer.monitor.IRequester;
+import io.github.systemgatherer.monitor.Response;
+import io.github.systemgatherer.notifier.INotifier;
+import io.github.systemgatherer.notifier.NotificationModule;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -17,7 +24,11 @@ import java.io.InputStreamReader;
 /**
  * @author Rinat Muhamedgaliev aka rmuhamedgaliev
  */
+<<<<<<< HEAD
 public class Requester implements IRequester, Job {
+=======
+public class Requester implements IRequester {
+>>>>>>> 7b8de7310480a09a5e5d13563618e0cef6bb9a90
 
     @Override
     public String getStatus(Host host) {
@@ -39,23 +50,37 @@ public class Requester implements IRequester, Job {
 
         HttpResponse response = client.execute(request);
 
-        System.out.println("Response Code : "
-                + response.getStatusLine().getStatusCode());
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
-        BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent()));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
         StringBuffer result = new StringBuffer();
         String line = "";
         while ((line = rd.readLine()) != null) {
             result.append(line);
         }
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Response resultResponse = mapper.readValue(result.toString(), Response.class);
+
+        Injector injector = Guice.createInjector(new NotificationModule());
+        INotifier notifier = injector.getInstance(INotifier.class);
+
+        if (resultResponse.getCode() != 0) {
+            notifier.sendEmail(resultResponse.getName(), resultResponse.getInfo().toString());
+        }
+
         return result.toString();
     }
+<<<<<<< HEAD
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        Host host = new Host("localhost", "127.0.0.1", new String[]{"check_disk", "check_memory"});
-        getStatus(host);
+        for (Host host: ConfigLoader.getConfig().getHosts()) {
+            getStatus(host);
+        }
     }
+=======
+>>>>>>> 7b8de7310480a09a5e5d13563618e0cef6bb9a90
 }

@@ -1,0 +1,18 @@
+{
+    "hosts": [
+        {
+            "ip": "127.0.0.1:8080",
+            "name": "localhost",
+            "checks": [
+                "check_disk",
+                "check_memory"
+            ]
+        }
+    ],
+    "email": {
+        "username": "rumbikvorp@gmail.com",
+        "host": "smtp.gmail.com",
+        "password": "gremmlok_1991",
+        "port": 465
+    }
+}
