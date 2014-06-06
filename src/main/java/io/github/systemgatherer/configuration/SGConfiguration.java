@@ -12,4 +12,15 @@ import java.util.List;
 @Data
 public class SGConfiguration extends Configuration {
 
+    @NotEmpty
+    private List<Host> hosts;
+    private Email email;
+
+    public SGConfiguration() {
+    }
+
+    public SGConfiguration(List<Host> hostses, Email email) {
+        this.hosts = hosts;
+        this.email = email;
+    }
 }

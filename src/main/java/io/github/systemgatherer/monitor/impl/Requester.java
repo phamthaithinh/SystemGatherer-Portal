@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.github.systemgatherer.configuration.ConfigLoader;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.name.Named;
 import io.github.systemgatherer.configuration.Host;
 import io.github.systemgatherer.monitor.IRequester;
 import io.github.systemgatherer.monitor.Response;
@@ -17,18 +20,16 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * @author Rinat Muhamedgaliev aka rmuhamedgaliev
  */
-<<<<<<< HEAD
 public class Requester implements IRequester, Job {
-=======
-public class Requester implements IRequester {
->>>>>>> 7b8de7310480a09a5e5d13563618e0cef6bb9a90
 
     @Override
     public String getStatus(Host host) {
@@ -51,7 +52,6 @@ public class Requester implements IRequester {
         HttpResponse response = client.execute(request);
 
         System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-
         BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
         StringBuffer result = new StringBuffer();
@@ -59,7 +59,6 @@ public class Requester implements IRequester {
         while ((line = rd.readLine()) != null) {
             result.append(line);
         }
-
         ObjectMapper mapper = new ObjectMapper();
 
         Response resultResponse = mapper.readValue(result.toString(), Response.class);
@@ -73,14 +72,16 @@ public class Requester implements IRequester {
 
         return result.toString();
     }
-<<<<<<< HEAD
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         for (Host host: ConfigLoader.getConfig().getHosts()) {
             getStatus(host);
         }
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode node = mapper.convertValue(result, JsonNode.class);
+
+        return result.toString();
     }
-=======
->>>>>>> 7b8de7310480a09a5e5d13563618e0cef6bb9a90
 }
