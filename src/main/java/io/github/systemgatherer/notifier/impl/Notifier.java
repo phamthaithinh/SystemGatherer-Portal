@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class Notifier implements INotifier {
@@ -62,5 +65,28 @@ public class Notifier implements INotifier {
         }
 
         return status;
+    }
+
+    @Override
+    public void sendSMS(String title, String content, String where) {
+        String[] cmd = {
+                "/bin/bash",
+                "-c",
+                "echo output | config/send_sms.py " + title + " " + content + " " + where
+        };
+        String result = "";
+        int code = 0;
+        try {
+            String line;
+            Process p = Runtime.getRuntime().exec(cmd);
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                result = result + line;
+            }
+            input.close();
+            code = p.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

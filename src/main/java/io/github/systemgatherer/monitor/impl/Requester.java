@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.github.systemgatherer.configuration.ConfigLoader;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.name.Named;
 import io.github.systemgatherer.configuration.Host;
 import io.github.systemgatherer.monitor.IRequester;
 import io.github.systemgatherer.monitor.Response;
@@ -20,11 +17,9 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 /**
  * @author Rinat Muhamedgaliev aka rmuhamedgaliev
@@ -37,7 +32,7 @@ public class Requester implements IRequester, Job {
         for (String check: host.getChecks()) {
             String url = "http://"+host.getIp()+":8080/?name="+check;
             try {
-                System.out.println(getHttpResponse(url));
+                System.out.println(getHttpResponse(url, host.getName(), check));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -45,7 +40,7 @@ public class Requester implements IRequester, Job {
         return  "";
     }
 
-    private String getHttpResponse(String url) throws IOException {
+    private String getHttpResponse(String url, String host, String check) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
 
@@ -68,6 +63,7 @@ public class Requester implements IRequester, Job {
 
         if (resultResponse.getCode() != 0) {
             notifier.sendEmail(resultResponse.getName(), resultResponse.getInfo().toString());
+            notifier.sendSMS(check, resultResponse.getInfo().toString(), host);
         }
 
         return result.toString();
@@ -78,10 +74,5 @@ public class Requester implements IRequester, Job {
         for (Host host: ConfigLoader.getConfig().getHosts()) {
             getStatus(host);
         }
-        ObjectMapper mapper = new ObjectMapper();
-
-        JsonNode node = mapper.convertValue(result, JsonNode.class);
-
-        return result.toString();
     }
 }
